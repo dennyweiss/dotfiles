@@ -1,0 +1,80 @@
+[include]
+    path = ~/.dotfiles/gitconfigs/.gitconfig.default
+
+[core]
+  editor = nano
+  excludesfile = ~/.gitignore
+  autocrlf = input
+  pager = cat
+
+[color]
+  branch = auto
+  diff = auto
+  interactive = auto
+  status = auto
+
+[web]
+  browser = google-chrome
+
+[credential]
+  helper = osxkeychain
+
+[push]
+  default = simple
+
+[merge]
+  tool = kdiff3
+	commit = no
+
+[difftool]
+  prompt = false
+
+[alias]
+  d = diff
+  pa = "!f() { git push && git push --tags; }; f"
+  dc = diff --cached
+  l1 = log -1
+  l = "!f() { git log \"-${1}\"; }; f"
+  co = checkout
+  ce = config --global -e
+  config-edit = ec
+  cs = config --global --list
+  config-show = cs
+  list = cs
+  aa = add --all
+  up = !git fetch --all && git pull --rebase --prune $@ && git submodule update --init --recursive
+  ba = branch -a -vv
+  cob = checkout -b
+  cobr = "!f() { git checkout -b ${1} origin/${1}; }; f"
+  cm = "!f() { git add -A && git commit -m \"${1}\"; }; f"
+  cma = commit --amend
+  save = !git add -A && git commit -m 'SAVEPOINT'
+  wip = !git add -u && git commit -m "WIP"
+  undo = reset HEAD~1 --mixed
+  amend = commit -a --amend
+  wipe = !git add -A && git commit -qm 'WIPE SAVEPOINT' && git reset HEAD~1 --hard
+  bclean = "!f() { git branch --merged ${1-master} | grep -v " ${1-master}$" | xargs git branch -d; }; f"
+  bdone = "!f() { git checkout ${1-master} && git up && git bclean ${1-master}; }; f"
+  fa = fetch --all
+  s = status
+  identity = "!f() { echo \"  user.name\t<user.email>\";echo \"  $(git config user.name)\t<$(git config user.email)>\"; }; f"
+  id = identity
+  is-tracked = "!f() { set -e; git ls-files --error-unmatch ${1} &>/dev/null || ( echo \"'${1}' is not tracked by git\" && exit 1; ); echo \"'${1}' is tracked by git\"; }; f"
+  rprune = "fetch origin --prune"
+  repo-size = "count-objects -vH"
+  stats-lines-per-author = "!f() { git ls-files | while read f; do git blame --line-porcelain $f | grep '^author '; done | sort -f | uniq -ic | sort -n; }; f"
+  stats-commits-per-author = "shortlog -s -n"
+  mainize = "branch -m master main"
+  pfush = "push --no-verify"
+  ppt = "!f() { echo 'git push'; git push; echo 'git push --tags';  git push --tags; }; f"
+  stats = count-objects -vH
+  brm = "branch -d"
+  brmf = "branch -D"
+  sid = rev-parse --short HEAD
+  short-commit-id = sid
+
+[pull]
+	ff = only
+
+[init]
+	defaultBranch = main

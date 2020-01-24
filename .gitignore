@@ -3,3 +3,6 @@
 *.LSOverride
 Thumbs.db
 .bundle
+gitconfigs/*
+!gitconfigs/.gitkeep
+src/150_remote-alias.zsh

@@ -1,16 +1,12 @@
 {
-    "config": {
-        "bin-dir": "bin",
-        "secure-http": false
-    },
-    "repositories": {
-        "0": {
-            "type": "composer",
-            "url": "https://packages.elbworx.de"
-        },
-        "packagist": {
-            "type": "composer",
-            "url": "https://packagist.org"
-        }
+  "config": {
+    "bin-dir": "bin",
+    "secure-http": false
+  },
+  "repositories": {
+    "packagist": {
+      "type": "composer",
+      "url": "https://packagist.org"
     }
+  }
 }

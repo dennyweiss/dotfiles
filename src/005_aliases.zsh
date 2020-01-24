@@ -1,150 +1,35 @@
 #!/bin/bash
 
 alias ll="ls -al"
-alias cdo="composer dump-autoload -o --profile -vvv"
 
-
-serve_html() {
-  port="${1}"
-  source="${2}"
-  
-  if [[ -z "${port}" ]]; then
-    port="8080"
-  fi
-
-  if [[ -z "${source}" ]]; then
-    source='.'
-  fi
-
-  python -m SimpleHTTPServer "${port}" "${source}"
-}
-
-
-alias serve=serve_html
-
-artisan() {
-  local artisan_path="$(pwd)/artisan"
-
-  if [ -f "${artisan_path}" ]; then
-    "${artisan_path}" "$@"
-  else
-    echo "artisan not found: ${artisan_path}"
-  fi
-}
-
-ar() {
-  local artisan_path="$(pwd)/artisan"
-
-  if [ -f "${artisan_path}" ]; then
-    ssh homestead -t "cd /home/vagrant/development.app; ./artisan $@"
-  fi
-}
-
-pr() {
-  local phpunit_path="$(pwd)/phpunit.xml"
-
-  if [ -f "${phpunit_path}" ]; then
-    ssh homestead -t "cd /home/vagrant/development.app; bin/phpunit $@"
-  else
-    echo "phpunit not configured"
-  fi
-
-}
-
-marked() {
-  local command="Marked 2 - "
-  local file="${1}"
-  local cwd="${2}"
-
-  if [[ "${cwd}" == "" ]]; then
-    cwd="$(pwd)";
-  fi
-
-  local file_path="${cwd}/${file}";
-
-  _function-description-helper "${command}" "${file_path}";
-
-  if [[ "${file_path}" == "" ]]; then
-    echo "${BOLD_RED}  → Could not find file: '${file_path}' $@${RESET}";
-    echo '';
-    return 0;
-  fi
-
-  /usr/bin/open -a 'Marked 2' "${file_path}";
-}
-
-edit-zsh() {
-  local file_path="${HOME}/.oh-my-zsh/"
-  _function-description-helper "open zsh config in vs code" "${file_path}"
-
-  code "${file_path}"
-}
+alias h:10='history | tail -10'
+alias h:100='history | tail -100'
+alias h:s='history | grep --'
 
 edit-ssh() {
   local file_path="${HOME}/.ssh/config"
   _function-description-helper "open ssh config in vs code" "${file_path}"
 
-  code "${file_path}"
-}
-
-_ssh-file-list-available-files() {
-  local ssh_dir="${1}"
-
-  if [ -z "${ssh_dir}" ]; then
-  
-    echo "ssh_dir parameter missing"
-    return 1
-  
-  fi
-
-  echo ''
-  echo -e '  Files:\n'
-  for ssh_file in "${ssh_dir}"/*
-  do
-    echo -e "  - $(basename "$ssh_file")"
-  done
-
-}
-
-ssh-file-copy-content() {
-  local command_string="ssh-file-copy-content"
-  local file="${1}"
-  local ssh_dir=~/.ssh
-
-  if [ -z "${file}" ]; then
-  
-    echo ''
-    echo -e "${BOLD_RED}[run]    → '${command_string} [FILENAME]' failed, [FILENAME] missing but required${RESET}"
-    _ssh-file-list-available-files "${ssh_dir}"
-    echo ''
-    return 1
-  fi
-
-  if [ ! -f "${ssh_dir}/${file}" ]; then
-    echo ''
-    echo -e "${BOLD_RED}[run]    → '${command_string} ${file}' failed, file '${file}' not found${RESET}"
-    _ssh-file-list-available-files "${ssh_dir}"
-    echo ''
-    return 1
-  fi
-
-  cat "${ssh_dir}/${file}" | pbcopy
-
-  if [ $? != 0 ]; then
-    echo ''
-    echo -e "${BOLD_RED}[run]    → '${command_string} ${file}' failed, could not copy content${RESET}"
-    echo ''
-    return 1
-  fi
-
-  _function-description-helper "${command_string} ${file}, content copied to pasteboard"
+  code -n "${file_path}"
 }
 
 edit-hosts() {
-  local file_path="/etc/hosts"
-  _function-description-helper "open hosts in vs code" "${file_path}"
+  local file_path="/private/etc/hosts"
+  local edit_command="sudo /usr/bin/nano ${file_path}"
+  _function-description-helper "edit /etc/hosts with '${edit_command}'"
 
-  code -n "${file_path}"
+  eval "${edit_command}"
+}
+
+current-path() {
+  local current_path="$(pwd)"
+  _function-description-helper "Copy current path '${current_path}' to clipboard"
+  if ! which pbcopy &>/dev/null; then
+    echo "ERROR: 'pbcopy' not found but required"
+    return 1
+  fi
+
+  echo "${current_path}" | pbcopy
 }
 
 chrome() {
@@ -177,17 +62,6 @@ open-in-iTerm() {
   fi
 
   open -a /Applications/iTerm.app "${location}"
-}
-
-make-executeable() {
-  local filepath="${1}"
-
-  local shell_command="chmod"
-  local arguments="a\=r\+w\+x ${filepath}"
-
-  _function-description-helper "${shell_command}" "${arguments}"
-
-  eval "${shell_command}" "${arguments}"
 }
 
 files-show-all() {
@@ -226,102 +100,6 @@ timestamp-unix() {
 }
 
 alias "tsu"=timestamp-unix
-
-transform-json-to-yaml() {
-  local source="${1}"
-  local target="${2}"
-
-  local program="json2yaml"
-  local sourceFileExtension=".json"
-  local targetFileExtension=".yml"
-  local functionName="${funcstack[1]}"
-  local filter="NONE"
-
-  _json-yaml-transformer \
-    "${program}" \
-    "${sourceFileExtension}" \
-    "${targetFileExtension}" \
-    "${functionName}" \
-    "${filter}" \
-    "${source}" \
-    "${target}"
-}
-
-transform-yaml-to-json() {
-  local source="${1}"
-  local target="${2}"
-  local filter="${3}"
-  
-  if [[ -z "${filter}" ]];then
-    filter="jq --indent 4 '.'"
-  fi
-
-  local program="yaml2json"
-  local sourceFileExtension=".yml"
-  local targetFileExtension=".json"
-  local functionName="${funcstack[1]}"
-
-  _json-yaml-transformer \
-    "${program}" \
-    "${sourceFileExtension}" \
-    "${targetFileExtension}" \
-    "${functionName}" \
-    "${filter}" \
-    "${source}" \
-    "${target}"
-}
-
-_json-yaml-transformer() {
-  local programm="${1}"
-  local sourceFileExtension="${2}"
-  local targetFileExtension="${3}"
-  local functionName="${4}"
-  local filter="${5}"
-  local source="${6}"
-  local target="${7}"
-
-  _function-description-helper "${programm} ${source} ${target}"
-
-  # check dependencies
-  command -v "${programm}" >/dev/null 2>&1 || \
-  { _function-call-failed 1 "'${programm}' required, but not installed"; return 1;}
-
-  if [[ "$#" -lt 6 || ( "$#" -gt 7 ) ]]; then
-    echo  -e "${BOLD_WHITE}[usage]${RESET}  → ${functionName} [source] [target**]"
-    return 1
-  fi
-
-  source="$(realpath ${source})"
-  if [ ! -f "$source" ]; then
-    _function-call-failed 1 "'${source}' could not be found"
-    return 1
-  fi
-
-  if [[ -z "${target}" ]]; then
-    target="$(dirname "${source}")/$(basename "$source" ${sourceFileExtension})${targetFileExtension}"
-  else
-    target="$(realpath ${target})"
-  fi
-
-  local targetDir="$(dirname "${target}")"
-  if [ ! -d "${targetDir}" ]; then
-    _function-call-failed 1 "'${targetDir}' does not exist"
-  fi
-
-  if [[ "${filter}" == "NONE" ]]; then
-    eval "${programm} ${source} > ${target}"
-  else
-    eval "${programm} ${source} | ${filter} > ${target}"
-  fi
-
-  if [ $? -ne 0 ]; then
-    _function-call-failed 1 "transformation failed"
-    return 1
-  fi
-
-  echo -e "${BOLD_YELLOW}[info]${RESET}   → transformation succeeded"
-  echo -e "         → '${target}'"
-}
 
 _command_exists() {
   #this should be a very portable way of checking if something is on the path
@@ -406,163 +184,6 @@ bashscriptloader() {
 
 alias "as-load-commands"='bashscriptloader "appsetting-commands"'
 
-function open-vscode-new-window() {
-  local program="/usr/local/bin/code"
-  local newWindowParameter="-n"
-  local commandString=""  
-
-  if [ "$#" -eq 0 ] && [ -z "${commandString}" ]; then
-    commandString="${program} ${newWindowParameter} $(pwd)"
-  fi
-
-  if [[ "${1}" == "--default" ]] && [ -z "${commandString}" ]; then
-    shift
-    commandString="${program} ${@}"
-  fi
-
-  if [ -z "${commandString}" ]; then
-    commandString="${program} ${newWindowParameter} ${@}"
-  fi
-
-  _function-description-helper "${commandString}"
-  eval "${commandString}"
-}
-
-alias "code"=open-vscode-new-window
-
-
-_show-terraform-executeable() {
-
-}
-
-terraform-dynamic() {
-  local globalTerraform="terraform"
-  local localTerraform="../../bin/tf"
-
-  local useLocalTerraform='False'
-
-  local commandString=""
-
-  if [[ -f "${localTerraform}" ]]; then
-    # useLocalTerraform='True'
-    commandString="${localTerraform}"
-  else
-    commandString="${globalTerraform}"
-  fi
-
-  if [[ "${1}" == "--show-executeable" ]]; then
-    echo ''
-    echo "${commandString}"
-    return 0
-  fi
-
-  eval "${commandString}" "${@}"
-}
-
-alias "tf"=terraform-dynamic
-
-
-ansible-vault-dynamic() {
-  local globalTerraform="terraform"
-  local localTerraform="./bin/av"
-
-  local useLocalTerraform='False'
-
-  local commandString=""
-
-  if [[ -f "${localTerraform}" ]]; then
-    # useLocalTerraform='True'
-    commandString="${localTerraform}"
-  else
-    echo "av not found"
-    return 1
-  fi
-
-  if [[ "${1}" == "--show-executeable" ]]; then
-    echo ''
-    echo "${commandString}"
-    return 0
-  fi
-
-  eval "${commandString}" "${@}"
-}
-
-alias "av"=ansible-vault-dynamic
-
-alias j=just
-
-just-global() {
-
-  if [[ -z "${1}" ]]; then
-    just ~/.just/list
-    return 0
-  fi
-
-  eval "just ~/.just/${@}"
-}
-
-alias jg=just-global
-
-add-to-file() {
-  content="${1}"
-  file="${2}"
-
-  USAGE="  USAGE: add-to-file [content] [filepath] --as-sudo* --overwrite* --verbose*"
-
-  echo ''
-  echo 'WARN command does not work'
-  return 1
-
-  echo ''
-  echo "Add Content to file"
-
-  if [[ "${@}" == *"--help"* ]]; then
-    echo ''
-    echo -e "${USAGE}"
-    return 1
-  fi
-
-  if [[ -z "$content" ]] || [[ -z "$file" ]] || [[ ! -f "${file}" ]]; then
-    echo ''
-    echo "  ERROR: parameters missing or invalid"
-    echo ''
-    echo -e "${USAGE}"
-    return 1
-  fi
-
-  sudo_string=""
-  if [[ "${@}" == *"--as-sudo"* ]]; then
-    as_sudo='sudo'
-  fi
-
-  append="-a"
-  if [[ "${@}" == *"--overwrite"* ]]; then
-    overwrite=''
-  fi
-
-  silent='>/dev/null'
-  if [[ "${@}" == *"--verbose"* ]]; then
-    silent=''
-  fi
-
-  command="echo \"${content}\" | ${as_sudo} tee ${append} ${file} ${silent};"
-
-  if [[ ! -z "${Debug}" ]] && [[ "${Debug}" == 'true' ]]; then
-    echo ''
-    echo "Command: ${command}"
-  fi
-
-  if [[ ! -z "${DryRun}" ]] && [[ "${DryRun}" == 'true' ]]; then
-    echo ''
-    echo "Abort: reason 'DryRun=${DryRun}'"
-    return 1
-  fi
-
-  eval "${command}"
-}
-
-alias gac='git add --all && git commit'
-
 tm-speed() {
   local __level=1
 
@@ -581,4 +202,94 @@ tm-speed() {
   echo ''
   sudo sysctl debug.lowpri\_throttle_enabled="${__level}"
   echo ''
+}
+
+_clone-website_usage() {
+  local usage=$(cat <<-HERE
+USAGE: clone-website URL TARGET_DIRECTORY [-h]
+
+options:
+  - h this usage info
+HERE
+)
+  echo
+  echo "${usage}"
+}
+
+clone-website() {
+
+  local url="${1:-undefined}"
+  local target="${2:-undefined}"
+
+  if ! which httrack &>/dev/null; then
+    echo
+    echo "ERROR: httrack required but missing"
+    _clone-website_usage
+    return 1
+  fi
+
+  if [[ "${url}" == 'undefined' ]]; then
+    echo
+    echo "ERROR: URL missing but required"
+    _clone-website_usage
+    return 1
+  fi
+
+  if [[ "${target}" == 'undefined' ]] || [[ ! -d "${target}" ]]; then
+    echo
+    echo "ERROR: TARGET directory missing but required"
+    _clone-website_usage
+    return 1
+  fi
+
+  httrack_command="httrack  --connection-per-second=50 \
+    --sockets=80 \
+    --keep-alive \
+    --disable-security-limits -n -i -s0 -m \
+    -F 'Mozilla/5.0 (X11;U; Linux i686; en-GB; rv:1.9.1) Gecko/20090624 Ubuntu/9.04 (jaunty) Firefox/3.5' \
+    -A100000000 \
+    -#L500000000 \
+    ${url} \
+    -O ${target} \
+    -Q"
+
+  if [[ "${DEBUB:-false}" == 'true' ]]; then
+    echo 
+    echo "INFO:  Show httrack command"
+    echo "${httrack_command}"
+    echo
+  fi
+
+  echo "INFO:  Copy '${url}' to '${target}'"
+  echo 
+  eval "${httrack_command}"
+}
+
+alias localip='ifconfig | sed -n "s/^.*inet \(192.[0-9]*.[0-9]*.[0-9]*\).*$/\1/p"'
+
+alias docker-up='docker ps -a | grep Up'
+
+docker-filter() {
+  filter_one="${1:-_false_}"
+  filter_two="${2:-_false_}"
+  filter_three="${3:-_false_}"
+
+  result="$(docker ps -a)"
+  if [[ "${filter_one}" != '_false_' ]]; then
+    result="$(echo "${result}" | grep "${filter_one}")"
+  fi
+
+  if [[ "${filter_two}" != '_false_' ]]; then
+    result="$(echo "${result}" | grep "${filter_two}")"
+  fi
+
+  if [[ "${filter_three}" != '_false_' ]]; then
+    result="$(echo "${result}" | grep "${filter_three}")"
+  fi
+
+  echo "${result}"
+}
+
+aws() {
+  docker run --rm -ti -v ~/.aws:/root/.aws -v $(pwd):/aws amazon/aws-cli "$@"
 }
