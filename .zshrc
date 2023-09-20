@@ -42,12 +42,16 @@ if [ -d "${HOME}/.cargo/bin" ]; then
   PATH="${HOME}/.cargo/bin:${PATH}"
 fi
 
-PATH="/usr/local/opt/ncurses/bin:$PATH"
+if [ -d /usr/local/opt/ncurses/bin ]; then
+  PATH="/usr/local/opt/ncurses/bin:$PATH"
+fi
 
 export PATH
 
 export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm
+
+eval "$(/opt/homebrew/bin/brew shellenv)"
 
 if which brew &>/dev/null; then
   _BREW_PYTHON_PATH="$(brew --prefix)/bin/python3"
@@ -59,8 +63,8 @@ if which brew &>/dev/null; then
   source $(brew --prefix)/share/antigen/antigen.zsh
 fi
 
-if [[ -f "${HOME}/.antigen/antigen.zsh" ]]; then 
-  source "${HOME}/.antigen/antigen.zsh"
+if [ -f /opt/homebrew/share/antigen/antigen.zsh ]; then
+  source /opt/homebrew/share/antigen/antigen.zsh
 fi
 
 # Load the oh-my-zsh's library.
@@ -74,10 +78,10 @@ SPACESHIP_DIR_PREFIX=''
 SPACESHIP_DIR_TRUNC_PREFIX="…/"
 SPACESHIP_CHAR_SYMBOL="⇲ __ __ __"
 SPACESHIP_CHAR_SUFFIX=" "
-SPACESHIP_PROMPT_ADD_NEWLINE=true 	# Adds a newline character before each prompt line 
+SPACESHIP_PROMPT_ADD_NEWLINE=false 	# Adds a newline character before each prompt line 
 
 spaceship_newline_indent() {
-  spaceship::section 'white' ''
+  spaceship::section ''
 }
 
 if ! docker ps &>/dev/null; then
@@ -103,7 +107,6 @@ SPACESHIP_PROMPT_ORDER=(
   dotnet
   exec_time
   line_sep
-  vi_mode
   jobs
   exit_code
   newline_indent
@@ -135,7 +138,7 @@ else
   echo ""
 fi
 
-test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
+#test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
 
 if which direnv &>/dev/null; then
   eval "$(direnv hook zsh)"
@@ -149,7 +152,9 @@ else
   export VISUAL="${EDITOR}"
 fi
 
-ssh-agent-activate --silent
+if which ssh-agent-activate &>/dev/null; then 
+  ssh-agent-activate --silent
+fi
 
 if [[ "${SHOW_STARTUP_DURATION}" == 'true' ]]; then
   end=$(date +%s)
@@ -161,5 +166,6 @@ if [[ -f .nvmrc ]] && which nvm &>/dev/null; then
   nvm use
 fi
 
-export HOMEBREW_GITHUB_API_TOKEN=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
+export HOMEBREW_GITHUB_API_TOKEN=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
 export HOMEBREW_NO_AUTO_UPDATE=1
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion

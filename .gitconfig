@@ -45,7 +45,8 @@
   up = !git fetch --all && git pull --rebase --prune $@ && git submodule update --init --recursive
   ba = branch -a -vv
   cob = checkout -b
-  cobr = "!f() { git checkout -b ${1} origin/${1}; }; f"
+  cobr = "!f() { git cob ${1} origin/${1}; }; f"
+  cobl = "!f() { git cob ${1} && git push --set-upstream origin ${1} --no-verify; }; f"
   cm = "!f() { git add -A && git commit -m \"${1}\"; }; f"
   cma = commit --amend
   save = !git add -A && git commit -m 'SAVEPOINT'
@@ -70,8 +71,11 @@
   stats = count-objects -vH
   brm = "branch -d"
   brmf = "branch -D"
+  rbrm = "push origin --delete --no-verify"
+  rbrmf = "push origin --delete --no-verify --force"
   sid = rev-parse --short HEAD
   short-commit-id = sid
+  log-since = "!f() { COMMIT_ID=${1}; shift; git log ${COMMIT_ID}..HEAD "${@}"; }; f"
 
 [pull]
 	ff = only
