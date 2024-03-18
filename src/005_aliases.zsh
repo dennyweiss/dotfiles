@@ -58,7 +58,7 @@ open-in-iTerm() {
   fi
 
   if [ -f "$location" ]; then
-    location="$( dirname $"${location}" )"
+    location="$(dirname $"${location}")"
   fi
 
   open -a /Applications/iTerm.app "${location}"
@@ -83,15 +83,16 @@ files-hide-hidden() {
 timestamp-unix() {
   local shell_command="date +%s"
   while getopts "h" opt; do
-  
+
     case $opt in
-      h)
-        _function-description-helper "${shell_command}"
-        return 1
-        ;;
-      :)
-        
-        return 0
+    h)
+      _function-description-helper "${shell_command}"
+      return 1
+      ;;
+    :)
+
+      return 0
+      ;;
     esac
 
   done
@@ -104,11 +105,11 @@ alias "tsu"=timestamp-unix
 _command_exists() {
   #this should be a very portable way of checking if something is on the path
   #usage: "if command_exists foo; then echo it exists; fi"
-  type "$1" &> /dev/null
+  type "$1" &>/dev/null
 }
 
 bashscriptloader() {
-  
+
   local ScriptFilename="${1}"
   local loadCount=0
   local lastLoadedScriptFile=''
@@ -124,13 +125,13 @@ bashscriptloader() {
   fi
 
   echo "  [INFO]  use script filename: '${ScriptFilename}'"
-  
+
   local scriptFilePaths="$(find $(pwd) -iname "${ScriptFilename}" -maxdepth 10)"
   local scriptFilePathArray=()
 
-  while IFS= read -r scriptFile; do 
+  while IFS= read -r scriptFile; do
     scriptFilePathArray+=("${scriptFile}")
-  done <<< ${scriptFilePaths}
+  done <<<${scriptFilePaths}
 
   echo "  [INFO]  found '${#scriptFilePathArray[@]}' file(s) for '${ScriptFilename}'"
 
@@ -139,7 +140,7 @@ bashscriptloader() {
     local taskMessage="  [TASK]  '${scriptFile}"
 
     # remove previously added usage functions
-    if type "${scriptUsageContractFunctionName}" &> /dev/null; then
+    if type "${scriptUsageContractFunctionName}" &>/dev/null; then
       echo -e "  [TASK]  Remove previously defined script usage function"
       unset -f "${scriptUsageContractFunctionName}"
     fi
@@ -149,14 +150,14 @@ bashscriptloader() {
       echo "${taskMessage}, try loading"
       echo "  [ERROR] '${scriptFile}', loading failed"
       return 1
-    fi 
+    fi
 
     lastLoadedScriptFile="${scriptFile}"
     loadCount=$((loadCount + 1))
 
     echo "${taskMessage}, loading succeeded"
 
-  done;
+  done
 
   if [ $loadCount -lt 1 ]; then
     echo "  [ERROR] loading failed"
@@ -168,9 +169,9 @@ bashscriptloader() {
     echo "  [WARN]  multiple scripts for '${ScriptFilename}' found"
     echo "          last loaded script: '${lastLoadedScriptFile}'"
   fi
-  
+
   local scriptHasUsageDescription='false'
-  type "${scriptUsageContractFunctionName}" &> /dev/null
+  type "${scriptUsageContractFunctionName}" &>/dev/null
   if [ $? -eq 0 ]; then
     scriptHasUsageDescription='true'
   fi
@@ -188,30 +189,63 @@ tm-speed() {
   local __level=1
 
   case "${1}" in
-    up)   
-      echo 'Speed UP Time Machine'
-      __level=0;;
-    down) 
-      echo 'Speed DOWN Time Machine'
-      __level=1;;
-    *)    
-      echo 'Usage: tm-speed [up|down]'
-      return 1;;
+  up)
+    echo 'Speed UP Time Machine'
+    __level=0
+    ;;
+  down)
+    echo 'Speed DOWN Time Machine'
+    __level=1
+    ;;
+  *)
+    echo 'Usage: tm-speed [up|down]'
+    return 1
+    ;;
   esac
-  
+
   echo ''
   sudo sysctl debug.lowpri\_throttle_enabled="${__level}"
   echo ''
 }
 
+os-desktop-icons() {
+  local usage="USAGE: os-desktop-icons [show|hide]"
+
+  case "${1:-on}" in
+    show)
+      defaults write com.apple.finder CreateDesktop true
+      killall Finder
+      echo
+      echo "⚠️  INFO:  Desktop icons are hidden"
+      echo
+    ;;
+    hide)
+      defaults write com.apple.finder CreateDesktop false
+      killall Finder
+      echo
+      echo "⚠️  INFO:  Desktop icons are hidden"
+      echo
+    ;;
+    *)
+      echo 
+      echo "❌  ERROR: option '${1}' is not supported"
+      echo 
+      echo "    ${usage}"
+      echo
+      return 1
+    ;;
+  esac
+}
+
 _clone-website_usage() {
-  local usage=$(cat <<-HERE
+  local usage=$(
+    cat <<-HERE
 USAGE: clone-website URL TARGET_DIRECTORY [-h]
 
 options:
   - h this usage info
 HERE
-)
+  )
   echo
   echo "${usage}"
 }
@@ -254,14 +288,14 @@ clone-website() {
     -Q"
 
   if [[ "${DEBUB:-false}" == 'true' ]]; then
-    echo 
+    echo
     echo "INFO:  Show httrack command"
     echo "${httrack_command}"
     echo
   fi
 
   echo "INFO:  Copy '${url}' to '${target}'"
-  echo 
+  echo
   eval "${httrack_command}"
 }
 
@@ -292,4 +326,49 @@ docker-filter() {
 
 aws() {
   docker run --rm -ti -v ~/.aws:/root/.aws -v $(pwd):/aws amazon/aws-cli "$@"
+}
+
+terraform() {
+  local env_file_option=''
+  if [[ -f "$(pwd)/.env" ]]; then
+    docker run \
+      --env-file $(pwd)/.env \
+      --rm \
+      -it \
+      -v "$(dirname $(dirname $(pwd))):$(dirname $(dirname $(pwd)))" \
+      -w $(pwd) \
+      --platform linux/amd64 hashicorp/terraform:1.6.6 \
+      "$@"
+  else
+    docker run \
+      --rm \
+      -it \
+      -v "$(dirname $(dirname $(pwd))):$(dirname $(dirname $(pwd)))" \
+      -w $(pwd) \
+      --platform linux/amd64 hashicorp/terraform:1.6.6 \
+      "$@"
+  fi
+}
+
+alias tf=terraform
+
+known_hosts_entry_removal() {
+  local ip_address="${1:-false}"
+  local known_host_location=~/.ssh/known_hosts
+
+  if [[ "${ip_address}" == 'false' ]]; then
+    echo "❌ ERROR: IP address as argument required"
+    return 1
+  fi
+
+  if [[ ! -f "${known_host_location}" ]]; then
+    echo "❌ ERROR: known_host_location '${known_host_location}' does not exist"
+    return 1
+  fi
+
+  gsed -i "/^"${ip_address}".*$/d" "${known_host_location}"
+
+  if [[ "${?}" == "0" ]]; then
+    echo "✅   '${ip_address}' removed from '${known_host_location}'"
+  fi
 }

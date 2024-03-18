@@ -46,6 +46,10 @@ if [ -d /usr/local/opt/ncurses/bin ]; then
   PATH="/usr/local/opt/ncurses/bin:$PATH"
 fi
 
+if [[ -d /opt/homebrew/opt/mysql-client/bin ]]; then
+  PATH="/opt/homebrew/opt/mysql-client/bin:$PATH"
+fi
+
 export PATH
 
 export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"
@@ -169,3 +173,14 @@ fi
 export HOMEBREW_GITHUB_API_TOKEN=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
 export HOMEBREW_NO_AUTO_UPDATE=1
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+
+# The next line updates PATH for the Google Cloud SDK.
+if [[ -f "${HOME}/.local/share/google-cloud-sdk/path.zsh.inc" ]]; then . "${HOME}/.local/share/google-cloud-sdk/path.zsh.inc"; fi
+
+# The next line enables shell command completion for gcloud.
+if [[ -f "${HOME}/.local/share/google-cloud-sdk/completion.zsh.inc" ]]; then . "${HOME}/.local/share/google-cloud-sdk/completion.zsh.inc"; fi
+
+# if docker context inspect &>/dev/null; then
+#   # required to be able to use `dive` for docker image inspection with `colima`
+#   export DOCKER_HOST=$(docker context inspect --format='{{.Endpoints.docker.Host}}')
+# fi

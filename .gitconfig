@@ -75,7 +75,7 @@
   rbrmf = "push origin --delete --no-verify --force"
   sid = rev-parse --short HEAD
   short-commit-id = sid
-  log-since = "!f() { COMMIT_ID=${1}; shift; git log ${COMMIT_ID}..HEAD "${@}"; }; f"
+  log-since = "!f() { COMMIT_ID=${1}; shift; END_COMMIT_ID=${2:-HEAD}; shift; git log ${COMMIT_ID}..${END_COMMIT_ID} "${@}"; }; f"
 
 [pull]
 	ff = only
