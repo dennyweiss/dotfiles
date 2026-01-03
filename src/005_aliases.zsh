@@ -1,6 +1,14 @@
 #!/bin/bash
 
+if which /opt/homebrew/bin/gls &>/dev/null; then
+    alias ls="gls --color=auto -h"
+fi
+
 alias ll="ls -al"
+
+if which /opt/homebrew/bin/gls &>/dev/null; then
+    alias ll="gls --color=auto -hal --time-style=\"+%Y-%m-%d %H:%M\""
+fi
 
 alias h:10='history | tail -10'
 alias h:100='history | tail -100'
@@ -8,9 +16,9 @@ alias h:s='history | grep --'
 
 edit-ssh() {
   local file_path="${HOME}/.ssh/config"
-  _function-description-helper "open ssh config in vs code" "${file_path}"
+  _function-description-helper "open ssh config in zed" "${file_path}"
 
-  code -n "${file_path}"
+  zed "${file_path}"
 }
 
 edit-hosts() {
@@ -227,9 +235,9 @@ os-desktop-icons() {
       echo
     ;;
     *)
-      echo 
+      echo
       echo "❌  ERROR: option '${1}' is not supported"
-      echo 
+      echo
       echo "    ${usage}"
       echo
       return 1
@@ -328,29 +336,29 @@ aws() {
   docker run --rm -ti -v ~/.aws:/root/.aws -v $(pwd):/aws amazon/aws-cli "$@"
 }
 
-terraform() {
-  local env_file_option=''
-  if [[ -f "$(pwd)/.env" ]]; then
-    docker run \
-      --env-file $(pwd)/.env \
-      --rm \
-      -it \
-      -v "$(dirname $(dirname $(pwd))):$(dirname $(dirname $(pwd)))" \
-      -w $(pwd) \
-      --platform linux/amd64 hashicorp/terraform:1.6.6 \
-      "$@"
-  else
-    docker run \
-      --rm \
-      -it \
-      -v "$(dirname $(dirname $(pwd))):$(dirname $(dirname $(pwd)))" \
-      -w $(pwd) \
-      --platform linux/amd64 hashicorp/terraform:1.6.6 \
-      "$@"
-  fi
-}
+# terraform() {
+#   local env_file_option=''
+#   if [[ -f "$(pwd)/.env" ]]; then
+#     docker run \
+#       --env-file $(pwd)/.env \
+#       --rm \
+#       -it \
+#       -v "/User:/User" \
+#       -w $(pwd) \
+#       --platform linux/amd64 hashicorp/terraform:1.6.6 \
+#       "$@"
+#   else
+#     docker run \
+#       --rm \
+#       -it \
+#       -v "$(dirname $(dirname $(pwd))):$(dirname $(dirname $(pwd)))" \
+#       -w $(pwd) \
+#       --platform linux/amd64 hashicorp/terraform:1.6.6 \
+#       "$@"
+#   fi
+# }
 
-alias tf=terraform
+# alias tf=terraform
 
 known_hosts_entry_removal() {
   local ip_address="${1:-false}"
@@ -371,4 +379,22 @@ known_hosts_entry_removal() {
   if [[ "${?}" == "0" ]]; then
     echo "✅   '${ip_address}' removed from '${known_host_location}'"
   fi
+}
+
+ccmr () {
+  claude-monitor --view realtime --custom-limit-tokens 200000 --timezone Europe/Berlin
+}
+
+ccmd () {
+  claude-monitor --view daily --custom-limit-tokens 200000 --timezone Europe/Berlin
+}
+
+ccmm () {
+  claude-monitor --view monthly --custom-limit-tokens 200000 --timezone Europe/Berlin
+}
+
+cc-history() {
+  CC_HISTORY_FILEPATH=~/.claude/history.jsonl
+  ( [ -f "${CC_HISTORY_FILEPATH}" ] || ( echo "ERROR: could not find '${CC_HISTORY_FILEPATH}'"; exit 1; ) ) \
+  && cat ~/.claude/history.jsonl | jq '.display' | sort | uniq | fzf | sed -e 's/^"//' -e 's/"$//' | pbcopy
 }

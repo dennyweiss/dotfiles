@@ -21,7 +21,7 @@ bindkey -e
 
 # End of lines configured by zsh-newuser-install
 # The following lines were added by compinstall
-
+fpath+=(~/.config/hcloud/completion/zsh)
 zstyle :compinstall filename "${HOME}/.zshrc"
 autoload -Uz compinit
 compinit
@@ -62,7 +62,7 @@ if which brew &>/dev/null; then
   if [[ -f "${BREW_PYTHON_PATH}" ]];then
     VIRTUALENVWRAPPER_PYTHON="${_BREW_PYTHON_PATH}"
   fi
-  
+
   # Setup antigen
   source $(brew --prefix)/share/antigen/antigen.zsh
 fi
@@ -80,16 +80,16 @@ SPACESHIP_DIR_SHOW=true
 SPACESHIP_DIR_TRUNC=5
 SPACESHIP_DIR_PREFIX=''
 SPACESHIP_DIR_TRUNC_PREFIX="…/"
-SPACESHIP_CHAR_SYMBOL="⇲ __ __ __"
+SPACESHIP_CHAR_SYMBOL="⇲"
 SPACESHIP_CHAR_SUFFIX=" "
-SPACESHIP_PROMPT_ADD_NEWLINE=false 	# Adds a newline character before each prompt line 
+SPACESHIP_PROMPT_ADD_NEWLINE=false 	# Adds a newline character before each prompt line
 
 spaceship_newline_indent() {
   spaceship::section ''
 }
 
 if ! docker ps &>/dev/null; then
-  # spaceship_docker when Docker daemon is not  
+  # spaceship_docker when Docker daemon is not
   export SPACESHIP_DOCKER_SHOW=false
 fi
 
@@ -146,17 +146,18 @@ fi
 
 if which direnv &>/dev/null; then
   eval "$(direnv hook zsh)"
-fi 
+fi
 
-if which code &>/dev/null; then
-  export EDITOR="code"
+if which zed &>/dev/null; then
+  export GIT_EDITOR="zed --wait"
+  export EDITOR="zed --wait"
   export VISUAL="${EDITOR}"
 else
   export EDITOR="$(which nano)"
   export VISUAL="${EDITOR}"
 fi
 
-if which ssh-agent-activate &>/dev/null; then 
+if which ssh-agent-activate &>/dev/null; then
   ssh-agent-activate --silent
 fi
 
@@ -180,7 +181,37 @@ if [[ -f "${HOME}/.local/share/google-cloud-sdk/path.zsh.inc" ]]; then . "${HOME
 # The next line enables shell command completion for gcloud.
 if [[ -f "${HOME}/.local/share/google-cloud-sdk/completion.zsh.inc" ]]; then . "${HOME}/.local/share/google-cloud-sdk/completion.zsh.inc"; fi
 
-# if docker context inspect &>/dev/null; then
-#   # required to be able to use `dive` for docker image inspection with `colima`
-#   export DOCKER_HOST=$(docker context inspect --format='{{.Endpoints.docker.Host}}')
-# fi
+if docker context inspect &>/dev/null; then
+  # required to be able to use `dive` for docker image inspection with `colima`
+  export DOCKER_HOST=$(docker context inspect --format='{{.Endpoints.docker.Host}}')
+fi
+
+# Herd injected PHP 8.4 configuration.
+export HERD_PHP_84_INI_SCAN_DIR="/Users/dw/Library/Application Support/Herd/config/php/84/"
+
+# Herd injected PHP binary.
+export PATH="/Users/dw/Library/Application Support/Herd/bin/":$PATH
+
+# pnpm
+export PNPM_HOME="/Users/dw/Library/pnpm"
+case ":$PATH:" in
+  *":$PNPM_HOME:"*) ;;
+  *) export PATH="$PNPM_HOME:$PATH" ;;
+esac
+# pnpm end
+
+# Herd injected PHP 8.3 configuration.
+export HERD_PHP_83_INI_SCAN_DIR="/Users/dw/Library/Application Support/Herd/config/php/83/"
+
+# Herd injected PHP 8.5 configuration.
+export HERD_PHP_85_INI_SCAN_DIR="/Users/dw/Library/Application Support/Herd/config/php/85/"
+
+# bun completions
+[ -s "/Users/dw/.bun/_bun" ] && source "/Users/dw/.bun/_bun"
+
+export CC_PROMPT_DB_CONNECTION=~/.claude/cc-prompt.sqlite
+[[ -f ~/Code/claude-code-tooling/cc-prompt ]] && export PATH=~/Code/claude-code-tooling:$PATH
+
+export CC_TELEGRAM_WEBHOOK_URL="https://do-01.whaaat.ai/webhook/cb182be6-e732-492d-b8a6-2a09a5046000"
+export CC_TELEGRAM_API_KEY="3ded09bb-4d2b-43dc-893b-b5d231ebc0c3"
+export CC_TELEGRAM_CHAT_ID="5096201627"

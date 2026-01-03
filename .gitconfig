@@ -2,7 +2,7 @@
     path = ~/.dotfiles/gitconfigs/.gitconfig.default
 
 [core]
-  editor = nano
+  editor = zed --wait
   excludesfile = ~/.gitignore
   autocrlf = input
   pager = cat
@@ -21,6 +21,7 @@
 
 [push]
   default = simple
+	autoSetupRemote = true
 
 [merge]
   tool = kdiff3
