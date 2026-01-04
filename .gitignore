@@ -7,3 +7,4 @@ Thumbs.db
 gitconfigs/*
 !gitconfigs/.gitkeep
 src/150_remote-alias.zsh
+/.tmp
