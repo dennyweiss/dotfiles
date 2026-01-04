@@ -1,9 +1,7 @@
 # AeroSpace Configuration for German QWERTZ Keyboard
-# Location: ~/.config/aerospace/aerospace.toml
 
-config-version = 2
 # Start AeroSpace at login
-start-at-login = true
+start-at-login = false
 
 # Commands to run after AeroSpace startup
 # 'exec-and-forget sketchybar',
@@ -34,17 +32,17 @@ automatically-unhide-macos-hidden-apps = false
 
 # Keyboard layout for German QWERTZ
 [key-mapping]
-preset = 'qwerty'
+    preset = 'qwerty'
 # Note: Use physical key positions, AeroSpace handles the layout
 
 # Window gaps (Catppuccin aesthetic)
 [gaps]
-inner.horizontal = 10
-inner.vertical = 10
-outer.left = 10
-outer.bottom = 10
-outer.top = 10    # Space for SketchyBar `50`
-outer.right = 10
+    inner.horizontal = 5
+    inner.vertical = 5
+    outer.left = 5
+    outer.bottom = 5
+    outer.top = 5    # Space for SketchyBar `50`
+    outer.right = 5
 
 # Main binding mode - German keyboard compatible
 [mode.main.binding]
@@ -53,24 +51,26 @@ outer.right = 10
 # Avoid Ctrl+Alt combinations as they conflict with AltGr on German keyboards
 
 # Layout management
-alt-slash = 'layout tiles horizontal vertical'
-alt-comma = 'layout accordion horizontal vertical'
+alt-shift-comma = 'layout tiles horizontal vertical'
+alt-comma = 'layout accordion vertical horizontal'
 
 # Focus navigation (HJKL - VI-style)
 alt-h = 'focus left'
-alt-j = 'focus down'
-alt-k = 'focus up'
+alt-k = 'focus down'
+alt-j = 'focus up'
 alt-l = 'focus right'
 
 # Move windows
 alt-shift-h = 'move left'
-alt-shift-j = 'move down'
-alt-shift-k = 'move up'
+alt-shift-k = 'move down'
+alt-shift-j = 'move up'
 alt-shift-l = 'move right'
 
 # Resize windows
-alt-minus = 'resize smart -50'
-alt-equal = 'resize smart +50'
+alt-u = 'resize smart -50'
+alt-shift-u = 'resize smart -400'
+alt-i = 'resize smart +50'
+alt-shift-i = 'resize smart +400'
 
 # Workspace navigation (1-9 and letters)
 # These work on German QWERTZ keyboards
@@ -92,21 +92,21 @@ alt-m = 'workspace M'  # Mail
 alt-c = 'workspace C'  # Chat
 
 # Move windows to workspaces (with focus follows)
-alt-shift-1 = ['move-node-to-workspace 1', '--focus-follows-window']
-alt-shift-2 = ['move-node-to-workspace 2', '--focus-follows-window']
-alt-shift-3 = ['move-node-to-workspace 3', '--focus-follows-window']
-alt-shift-4 = ['move-node-to-workspace 4', '--focus-follows-window']
-alt-shift-5 = ['move-node-to-workspace 5', '--focus-follows-window']
-alt-shift-6 = ['move-node-to-workspace 6', '--focus-follows-window']
-alt-shift-7 = ['move-node-to-workspace 7', '--focus-follows-window']
-alt-shift-8 = ['move-node-to-workspace 8', '--focus-follows-window']
-alt-shift-9 = ['move-node-to-workspace 9', '--focus-follows-window']
+alt-shift-1 = ['move-node-to-workspace 1 --focus-follows-window']
+alt-shift-2 = ['move-node-to-workspace 2 --focus-follows-window']
+alt-shift-3 = ['move-node-to-workspace 3 --focus-follows-window']
+alt-shift-4 = ['move-node-to-workspace 4 --focus-follows-window']
+alt-shift-5 = ['move-node-to-workspace 5 --focus-follows-window']
+alt-shift-6 = ['move-node-to-workspace 6 --focus-follows-window']
+alt-shift-7 = ['move-node-to-workspace 7 --focus-follows-window']
+alt-shift-8 = ['move-node-to-workspace 8 --focus-follows-window']
+alt-shift-9 = ['move-node-to-workspace 9 --focus-follows-window']
 
-alt-shift-t = ['move-node-to-workspace T', '--focus-follows-window']
-alt-shift-w = ['move-node-to-workspace W', '--focus-follows-window']
-alt-shift-e = ['move-node-to-workspace E', '--focus-follows-window']
-alt-shift-m = ['move-node-to-workspace M', '--focus-follows-window']
-alt-shift-c = ['move-node-to-workspace C', '--focus-follows-window']
+alt-shift-t = ['move-node-to-workspace T --focus-follows-window']
+alt-shift-w = ['move-node-to-workspace W --focus-follows-window']
+alt-shift-e = ['move-node-to-workspace E --focus-follows-window']
+alt-shift-m = ['move-node-to-workspace M --focus-follows-window']
+alt-shift-c = ['move-node-to-workspace C --focus-follows-window']
 
 # Workspace back and forth
 alt-tab = 'workspace-back-and-forth'
@@ -116,11 +116,11 @@ alt-shift-left = 'move-workspace-to-monitor left'
 alt-shift-right = 'move-workspace-to-monitor right'
 
 # Enter service mode
-alt-shift-semicolon = 'mode service'
+alt-ctrl-shift-comma = 'mode service'
 
 # Service mode for advanced operations
 [mode.service.binding]
-esc = ['reload-config', 'mode main']
+esc = ['exec-and-forget aerospace reload-config˛', 'mode main']
 r = ['flatten-workspace-tree', 'mode main']
 f = ['layout floating tiling', 'mode main']
 backspace = ['close-all-windows-but-current', 'mode main']
