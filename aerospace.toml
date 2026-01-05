@@ -165,3 +165,37 @@ run = 'layout floating'
 if.app-id = 'com.apple.finder'
 if.window-title-regex-substring = '(Copy|Move|Delete)'
 run = 'layout floating'
+
+# ////////////////////////////////////////////////////////////////
+# // COMMUNICATION ///////////////////////////////////////////////
+
+# // Discord //////////////////////
+[[on-window-detected]]
+if.app-id = 'com.hnc.Discord'
+run = 'move-node-to-workspace Communication_1'
+
+# // Messages //////////////////////
+[[on-window-detected]]
+if.app-id = 'com.apple.MobileSMS'
+run = 'move-node-to-workspace Communication_1'
+
+# // Telegram //////////////////////
+[[on-window-detected]]
+if.app-id = 'ru.keepcoder.Telegram'
+run = 'move-node-to-workspace Communication_1'
+
+# // WhatsApp //////////////////////
+[[on-window-detected]]
+if.app-id = 'net.whatsapp.WhatsApp'
+run = 'move-node-to-workspace Communication_1'
+
+# // Apple Mail ///////////////////
+[[on-window-detected]]
+if.app-id = 'com.apple.mail'
+check-further-callbacks = true
+run = 'move-node-to-workspace Communication_1'
+
+[[on-window-detected]]
+if.app-id = 'com.apple.mail'
+if.window-title-regex-substring = 'Neue E-Mail'
+run = ['layout floating', 'move-node-to-workspace Communication_1']
