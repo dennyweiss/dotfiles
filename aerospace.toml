@@ -83,10 +83,14 @@ alt-8 = 'workspace 8'
 alt-9 = 'workspace 9'
 
 # Letter-based workspaces (A-Z)
-alt-t = 'workspace T'  # Terminal
-alt-w = 'workspace W'  # Web
-alt-e = 'workspace E'  # Editor
-alt-c = 'workspace C'  # Communication
+alt-t = 'workspace Terminal_1'  # Terminal
+alt-w = 'workspace Web_1'  # Web
+alt-i = 'workspace IDE_1'  # Editor
+alt-c = 'workspace Communication_1'  # Communication
+alt-ctrl-t = 'workspace Terminal_2'  # Terminal
+alt-ctrl-w = 'workspace Web_2'  # Web
+alt-ctrl-i = 'workspace IDE_2'  # Editor
+alt-ctrl-c = 'workspace Communication_2'  # Communication
 
 # Move windows to workspaces (with focus follows)
 alt-shift-1 = ['move-node-to-workspace 1 --focus-follows-window']
@@ -97,21 +101,44 @@ alt-shift-7 = ['move-node-to-workspace 7 --focus-follows-window']
 alt-shift-8 = ['move-node-to-workspace 8 --focus-follows-window']
 alt-shift-9 = ['move-node-to-workspace 9 --focus-follows-window']
 
-alt-shift-t = ['move-node-to-workspace T --focus-follows-window']
-alt-shift-w = ['move-node-to-workspace W --focus-follows-window']
-alt-shift-e = ['move-node-to-workspace E --focus-follows-window']
-alt-shift-c = ['move-node-to-workspace C --focus-follows-window']
+alt-shift-t = ['move-node-to-workspace Terminal_1 --focus-follows-window']
+alt-shift-w = ['move-node-to-workspace Web_1 --focus-follows-window']
+alt-shift-i = ['move-node-to-workspace IDE_1 --focus-follows-window']
+alt-shift-c = ['move-node-to-workspace Communication_1 --focus-follows-window']
+
+alt-ctrl-shift-t = ['move-node-to-workspace Terminal_2 --focus-follows-window']
+alt-ctrl-shift-w = ['move-node-to-workspace Web_2 --focus-follows-window']
+alt-ctrl-shift-i = ['move-node-to-workspace IDE_2 --focus-follows-window']
+alt-ctrl-shift-c = ['move-node-to-workspace Communication_2 --focus-follows-window']
 
 # Workspace back and forth
 alt-tab = 'workspace-back-and-forth'
 
 # Multi-monitor support
-#
-# alt-shift-left = 'move-workspace-to-monitor left'
-# alt-shift-right = 'move-workspace-to-monitor right'
+# @TODO add multimonitor setup
+# alt-f1 = 'move-workspace-to-monitor left'
+# alt-f2 = 'move-workspace-to-monitor right'
 
 # Enter service mode
 alt-ctrl-shift-comma = 'mode service'
+[workspace-to-monitor-force-assignment]
+1 = ['main']
+2 = ['main']
+3 = ['main']
+
+7 = ['secondary']
+8 = ['secondary']
+9 = ['secondary']
+
+Terminal_1 = ['main']
+Web_1 = ['main']
+IDE_1 = ['main']
+Communication_1 = ['main']
+
+Terminal_2 = ['secondary']
+Web_2 = ['secondary']
+IDE_2 = ['secondary']
+Communication_2 = ['secondary']
 
 # Service mode for advanced operations
 [mode.service.binding]
