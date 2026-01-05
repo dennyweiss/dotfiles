@@ -74,13 +74,13 @@ alt-shift-p = 'resize smart +400'
 
 # Workspace navigation (1-9 and letters)
 # These work on German QWERTZ keyboards
-alt-1 = 'workspace 1'
-alt-2 = 'workspace 2'
-alt-3 = 'workspace 3'
+alt-a = 'workspace 1'
+alt-s = 'workspace 2'
+alt-d = 'workspace 3'
 
-alt-7 = 'workspace 7'
-alt-8 = 'workspace 8'
-alt-9 = 'workspace 9'
+alt-ctrl-a = 'workspace 7'
+alt-ctrl-s = 'workspace 8'
+alt-ctrl-d = 'workspace 9'
 
 # Letter-based workspaces (A-Z)
 alt-t = 'workspace Terminal_1'  # Terminal
@@ -94,13 +94,13 @@ alt-ctrl-i = 'workspace IDE_2'  # Editor
 alt-ctrl-c = 'workspace Communication_2'  # Communication
 
 # Move windows to workspaces (with focus follows)
-alt-shift-1 = ['move-node-to-workspace 1 --focus-follows-window']
-alt-shift-2 = ['move-node-to-workspace 2 --focus-follows-window']
-alt-shift-3 = ['move-node-to-workspace 3 --focus-follows-window']
+alt-shift-a = ['move-node-to-workspace 1 --focus-follows-window']
+alt-shift-s = ['move-node-to-workspace 2 --focus-follows-window']
+alt-shift-d = ['move-node-to-workspace 3 --focus-follows-window']
 
-alt-shift-7 = ['move-node-to-workspace 7 --focus-follows-window']
-alt-shift-8 = ['move-node-to-workspace 8 --focus-follows-window']
-alt-shift-9 = ['move-node-to-workspace 9 --focus-follows-window']
+alt-ctrl-shift-a = ['move-node-to-workspace 7 --focus-follows-window']
+alt-ctrl-shift-s = ['move-node-to-workspace 8 --focus-follows-window']
+alt-ctrl-shift-d = ['move-node-to-workspace 9 --focus-follows-window']
 
 alt-shift-t = ['move-node-to-workspace Terminal_1 --focus-follows-window']
 alt-shift-w = ['move-node-to-workspace Web_1 --focus-follows-window']
@@ -199,3 +199,40 @@ run = 'move-node-to-workspace Communication_1'
 if.app-id = 'com.apple.mail'
 if.window-title-regex-substring = 'Neue E-Mail'
 run = ['layout floating', 'move-node-to-workspace Communication_1']
+
+# // TOOLS /////////////////////////////////////////////////////////
+[[on-window-detected]]
+if.app-id = 'com.1password.1password'
+run = ['layout floating']
+
+[[on-window-detected]]
+if.app-id = 'com.apple.ActivityMonitor'
+run = ['layout floating']
+
+# // WORKSPACE 1 ///////////////////////////////////////////////////
+# @todo add ChatGPT
+[[on-window-detected]]
+if.app-id = 'com.brave.Browser'
+if.window-title-regex-substring = '(– Perplexity|– Claude|– ChatGPT)'
+run = ['move-node-to-workspace 1']
+
+# // IDE /////////////////////////////////////////////////////////
+[[on-window-detected]]
+if.app-id = 'com.jetbrains.PhpStorm'
+check-further-callbacks = true
+run = 'move-node-to-workspace IDE_1'
+
+[[on-window-detected]]
+if.app-id = 'com.jetbrains.PhpStorm'
+if.window-title-regex-substring = 'Welcome to PhpStorm'
+run = ['layout floating']
+
+[[on-window-detected]]
+if.app-id = 'com.jetbrains.pycharm'
+check-further-callbacks = true
+run = 'move-node-to-workspace IDE_1'
+
+[[on-window-detected]]
+if.app-id = 'com.jetbrains.pycharm'
+if.window-title-regex-substring = 'Welcome to PyCharm'
+run = ['layout floating']
