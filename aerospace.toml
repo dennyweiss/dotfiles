@@ -74,13 +74,13 @@ alt-shift-p = 'resize smart +400'
 
 # Workspace navigation (1-9 and letters)
 # These work on German QWERTZ keyboards
-alt-a = 'workspace 1'
-alt-s = 'workspace 2'
-alt-d = 'workspace 3'
+alt-a = 'workspace A_1'
+alt-s = 'workspace S_1'
+alt-d = 'workspace D_1'
 
-alt-ctrl-a = 'workspace 7'
-alt-ctrl-s = 'workspace 8'
-alt-ctrl-d = 'workspace 9'
+alt-ctrl-a = 'workspace A_2'
+alt-ctrl-s = 'workspace S_2'
+alt-ctrl-d = 'workspace D_2'
 
 # Letter-based workspaces (A-Z)
 alt-t = 'workspace Terminal_1'  # Terminal
@@ -94,13 +94,13 @@ alt-ctrl-i = 'workspace IDE_2'  # Editor
 alt-ctrl-c = 'workspace Communication_2'  # Communication
 
 # Move windows to workspaces (with focus follows)
-alt-shift-a = ['move-node-to-workspace 1 --focus-follows-window']
-alt-shift-s = ['move-node-to-workspace 2 --focus-follows-window']
-alt-shift-d = ['move-node-to-workspace 3 --focus-follows-window']
+alt-shift-a = ['move-node-to-workspace A_1 --focus-follows-window']
+alt-shift-s = ['move-node-to-workspace S_1 --focus-follows-window']
+alt-shift-d = ['move-node-to-workspace D_1 --focus-follows-window']
 
-alt-ctrl-shift-a = ['move-node-to-workspace 7 --focus-follows-window']
-alt-ctrl-shift-s = ['move-node-to-workspace 8 --focus-follows-window']
-alt-ctrl-shift-d = ['move-node-to-workspace 9 --focus-follows-window']
+alt-ctrl-shift-a = ['move-node-to-workspace A_2 --focus-follows-window']
+alt-ctrl-shift-s = ['move-node-to-workspace S_2 --focus-follows-window']
+alt-ctrl-shift-d = ['move-node-to-workspace D_2 --focus-follows-window']
 
 alt-shift-t = ['move-node-to-workspace Terminal_1 --focus-follows-window']
 alt-shift-w = ['move-node-to-workspace Web_1 --focus-follows-window']
@@ -124,13 +124,13 @@ alt-tab = 'workspace-back-and-forth'
 # Enter service mode
 alt-ctrl-shift-comma = 'mode service'
 [workspace-to-monitor-force-assignment]
-1 = ['main']
-2 = ['main']
-3 = ['main']
+A_1 = ['main']
+S_1 = ['main']
+D_1 = ['main']
 
-7 = ['secondary']
-8 = ['secondary']
-9 = ['secondary']
+A_2 = ['secondary']
+S_2 = ['secondary']
+D_2 = ['secondary']
 
 Terminal_1 = ['main']
 Web_1 = ['main']
@@ -163,7 +163,11 @@ run = 'layout floating'
 
 [[on-window-detected]]
 if.app-id = 'com.apple.finder'
-if.window-title-regex-substring = '(Copy|Move|Delete)'
+run = 'layout floating'
+
+[[on-window-detected]]
+if.app-id = 'com.runningwithcrayons.Alfred-Preferences'
+if.window-title-regex-substring = 'Alfred Preferences'
 run = 'layout floating'
 
 # ////////////////////////////////////////////////////////////////

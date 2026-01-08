@@ -215,3 +215,7 @@ export CC_PROMPT_DB_CONNECTION=~/.claude/cc-prompt.sqlite
 export CC_TELEGRAM_WEBHOOK_URL="https://do-01.whaaat.ai/webhook/cb182be6-e732-492d-b8a6-2a09a5046000"
 export CC_TELEGRAM_API_KEY="3ded09bb-4d2b-43dc-893b-b5d231ebc0c3"
 export CC_TELEGRAM_CHAT_ID="5096201627"
+
+# bun
+export BUN_INSTALL="$HOME/.bun"
+export PATH="$BUN_INSTALL/bin:$PATH"
