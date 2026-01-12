@@ -77,10 +77,12 @@ alt-shift-p = 'resize smart +400'
 alt-a = 'workspace A_1'
 alt-s = 'workspace S_1'
 alt-d = 'workspace D_1'
+alt-f = 'workspace F_1'
 
 alt-ctrl-a = 'workspace A_2'
 alt-ctrl-s = 'workspace S_2'
 alt-ctrl-d = 'workspace D_2'
+alt-ctrl-f = 'workspace F_2'
 
 # Letter-based workspaces (A-Z)
 alt-t = 'workspace Terminal_1'  # Terminal
@@ -97,10 +99,12 @@ alt-ctrl-c = 'workspace Communication_2'  # Communication
 alt-shift-a = ['move-node-to-workspace A_1 --focus-follows-window']
 alt-shift-s = ['move-node-to-workspace S_1 --focus-follows-window']
 alt-shift-d = ['move-node-to-workspace D_1 --focus-follows-window']
+alt-shift-f = ['move-node-to-workspace F_1 --focus-follows-window']
 
 alt-ctrl-shift-a = ['move-node-to-workspace A_2 --focus-follows-window']
 alt-ctrl-shift-s = ['move-node-to-workspace S_2 --focus-follows-window']
 alt-ctrl-shift-d = ['move-node-to-workspace D_2 --focus-follows-window']
+alt-ctrl-shift-f = ['move-node-to-workspace F_2 --focus-follows-window']
 
 alt-shift-t = ['move-node-to-workspace Terminal_1 --focus-follows-window']
 alt-shift-w = ['move-node-to-workspace Web_1 --focus-follows-window']
@@ -152,9 +156,9 @@ backspace = ['close-all-windows-but-current', 'mode main']
 
 # Join windows
 alt-shift-h = ['join-with left', 'mode main']
+alt-shift-u = ['join-with up', 'mode main']
 alt-shift-j = ['join-with down', 'mode main']
-alt-shift-k = ['join-with up', 'mode main']
-alt-shift-l = ['join-with right', 'mode main']
+alt-shift-k = ['join-with right', 'mode main']
 
 # Application-specific window handling
 [[on-window-detected]]
@@ -217,8 +221,14 @@ run = ['layout floating']
 # @todo add ChatGPT
 [[on-window-detected]]
 if.app-id = 'com.brave.Browser'
-if.window-title-regex-substring = '(– Perplexity|– Claude|– ChatGPT)'
-run = ['move-node-to-workspace 1']
+if.window-title-regex-substring = '(– Perplexity|– Claude)'
+check-further-callbacks = true
+run = ['move-node-to-workspace A_1']
+
+[[on-window-detected]]
+if.app-id = 'com.brave.Browser'
+if.window-title-regex-substring = '(– Gemini|– ChatGPT)'
+run = ['move-node-to-workspace S_1']
 
 # // IDE /////////////////////////////////////////////////////////
 [[on-window-detected]]
