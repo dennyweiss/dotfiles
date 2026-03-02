@@ -398,3 +398,19 @@ cc-history() {
   ( [ -f "${CC_HISTORY_FILEPATH}" ] || ( echo "ERROR: could not find '${CC_HISTORY_FILEPATH}'"; exit 1; ) ) \
   && cat ~/.claude/history.jsonl | jq '.display' | sort | uniq | fzf | sed -e 's/^"//' -e 's/"$//' | pbcopy
 }
+
+bos::fast() {
+    (cd ~/Code/UnitScale/business-os && CAN=b1 claude --model sonnet)
+}
+
+bos::fast::chrome() {
+    (cd ~/Code/UnitScale/business-os && CAN=b1 claude --model sonnet --chrome)
+}
+
+bos() {
+    (cd ~/Code/UnitScale/business-os && CAN=b1 claude --model opus)
+}
+
+bos::chrome() {
+    (cd ~/Code/UnitScale/business-os && CAN=b1 claude --model opus --chrome)
+}

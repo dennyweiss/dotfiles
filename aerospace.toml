@@ -94,6 +94,7 @@ alt-ctrl-t = 'workspace Terminal_2'  # Terminal
 alt-ctrl-w = 'workspace Web_2'  # Web
 alt-ctrl-i = 'workspace IDE_2'  # Editor
 alt-ctrl-c = 'workspace Communication_2'  # Communication
+alt-ctrl-m = 'workspace Media_2'  # Communication
 
 # Move windows to workspaces (with focus follows)
 alt-shift-a = ['move-node-to-workspace A_1 --focus-follows-window']
@@ -116,6 +117,7 @@ alt-ctrl-shift-t = ['move-node-to-workspace Terminal_2 --focus-follows-window']
 alt-ctrl-shift-w = ['move-node-to-workspace Web_2 --focus-follows-window']
 alt-ctrl-shift-i = ['move-node-to-workspace IDE_2 --focus-follows-window']
 alt-ctrl-shift-c = ['move-node-to-workspace Communication_2 --focus-follows-window']
+alt-ctrl-shift-m = ['move-node-to-workspace Media_2 --focus-follows-window']
 
 # Workspace back and forth
 alt-tab = 'workspace-back-and-forth'
@@ -125,29 +127,34 @@ alt-tab = 'workspace-back-and-forth'
 # alt-f1 = 'move-workspace-to-monitor left'
 # alt-f2 = 'move-workspace-to-monitor right'
 
-# Enter service mode
-alt-ctrl-shift-comma = 'mode service'
 [workspace-to-monitor-force-assignment]
 A_1 = ['main']
 S_1 = ['main']
 D_1 = ['main']
+F_1 = ['main']
 
 A_2 = ['secondary']
 S_2 = ['secondary']
 D_2 = ['secondary']
+F_2 = ['secondary']
 
 Terminal_1 = ['main']
 Web_1 = ['main']
 IDE_1 = ['main']
 Communication_1 = ['main']
-Media = ['main']
+Media_1 = ['main']
 
 Terminal_2 = ['secondary']
 Web_2 = ['secondary']
 IDE_2 = ['secondary']
 Communication_2 = ['secondary']
+Media_2 = ['secondary']
 
 # Service mode for advanced operations
+
+# Enter service mode
+alt-ctrl-shift-comma = 'mode service'
+
 [mode.service.binding]
 esc = ['exec-and-forget aerospace reload-config˛', 'mode main']
 r = ['flatten-workspace-tree', 'mode main']
@@ -185,19 +192,36 @@ run = 'move-node-to-workspace Communication_1'
 # // Messages //////////////////////
 [[on-window-detected]]
 if.app-id = 'com.apple.MobileSMS'
+check-further-callbacks = true
 run = 'move-node-to-workspace Communication_1'
+
+[[on-window-detected]]
+if.app-id = 'com.apple.MobileSMS'
+run = "layout floating"
 
 # // Telegram //////////////////////
 [[on-window-detected]]
 if.app-id = 'ru.keepcoder.Telegram'
+check-further-callbacks = true
 run = 'move-node-to-workspace Communication_1'
+
+[[on-window-detected]]
+if.app-id = 'ru.keepcoder.Telegram'
+run = "layout floating"
+
 
 # // WhatsApp //////////////////////
 [[on-window-detected]]
 if.app-id = 'net.whatsapp.WhatsApp'
+check-further-callbacks = true
 run = 'move-node-to-workspace Communication_1'
 
-# // Apple Mail ///////////////////
+[[on-window-detected]]
+if.app-id = 'net.whatsapp.WhatsApp'
+if.window-title-regex-substring = 'WhatsApp'
+run = "layout floating"
+
+# // Apple Mail && Calendar ///////////////////
 [[on-window-detected]]
 if.app-id = 'com.apple.mail'
 check-further-callbacks = true
@@ -208,27 +232,51 @@ if.app-id = 'com.apple.mail'
 if.window-title-regex-substring = 'Neue E-Mail'
 run = ['layout floating', 'move-node-to-workspace Communication_1']
 
+[[on-window-detected]]
+if.app-id = 'com.apple.iCal'
+check-further-callbacks = true
+run = 'move-node-to-workspace Communication_1'
+
 # // TOOLS /////////////////////////////////////////////////////////
 [[on-window-detected]]
 if.app-id = 'com.1password.1password'
 run = ['layout floating']
 
 [[on-window-detected]]
+if.app-id = 'com.fujitsu.pfu.ScanSnapHome'
+run = ['layout floating']
+
+[[on-window-detected]]
 if.app-id = 'com.apple.ActivityMonitor'
+run = ['layout floating']
+
+[[on-window-detected]]
+if.app-id = 'com.moneymoney-app.retail'
 run = ['layout floating']
 
 # // WORKSPACE 1 ///////////////////////////////////////////////////
 # @todo add ChatGPT
 [[on-window-detected]]
 if.app-id = 'com.brave.Browser'
-if.window-title-regex-substring = '(– Perplexity|– Claude)'
+if.window-title-regex-substring = '(– perplexity-1|– perplexity-2|– claude)'
 check-further-callbacks = true
 run = ['move-node-to-workspace A_1']
 
 [[on-window-detected]]
 if.app-id = 'com.brave.Browser'
-if.window-title-regex-substring = '(– Gemini|– ChatGPT)'
+check-further-callbacks = true
+if.window-title-regex-substring = '(– gemini|– chatgpt)'
 run = ['move-node-to-workspace S_1']
+
+[[on-window-detected]]
+if.app-id = 'com.brave.Browser'
+check-further-callbacks = true
+if.window-title-regex-substring = '(– -private-|– whaaat.ai|– unitscale)'
+run = ['move-node-to-workspace D_1']
+
+[[on-window-detected]]
+if.app-id = 'com.google.Chrome'
+run = ['move-node-to-workspace F_1']
 
 # // IDE /////////////////////////////////////////////////////////
 [[on-window-detected]]
@@ -242,6 +290,16 @@ if.window-title-regex-substring = 'Welcome to PhpStorm'
 run = ['layout floating']
 
 [[on-window-detected]]
+if.app-id = 'com.jetbrains.WebStorm'
+check-further-callbacks = true
+run = 'move-node-to-workspace IDE_1'
+
+[[on-window-detected]]
+if.app-id = 'com.jetbrains.WebStorm'
+if.window-title-regex-substring = 'Welcome to WebStorm'
+run = ['layout floating']
+
+[[on-window-detected]]
 if.app-id = 'com.jetbrains.pycharm'
 check-further-callbacks = true
 run = 'move-node-to-workspace IDE_1'
@@ -249,4 +307,26 @@ run = 'move-node-to-workspace IDE_1'
 [[on-window-detected]]
 if.app-id = 'com.jetbrains.pycharm'
 if.window-title-regex-substring = 'Welcome to PyCharm'
+run = ['layout floating']
+
+[[on-window-detected]]
+if.app-id = 'dev.zed.Zed'
+run = 'move-node-to-workspace IDE_1'
+
+[[on-window-detected]]
+if.app-id = 'com.electron.wispr-flow'
+run = ['layout floating']
+
+[[on-window-detected]]
+if.app-id = 'de.beyondco.herd'
+run = ['layout floating']
+
+[[on-window-detected]]
+if.app-id = 'org.pqrs.Karabiner-Elements.Settings'
+check-further-callbacks = true
+run = ['layout floating']
+
+[[on-window-detected]]
+if.app-id = 'org.pqrs.Karabiner-EventViewer'
+check-further-callbacks = true
 run = ['layout floating']

@@ -219,3 +219,6 @@ export CC_TELEGRAM_CHAT_ID="5096201627"
 # bun
 export BUN_INSTALL="$HOME/.bun"
 export PATH="$BUN_INSTALL/bin:$PATH"
+
+# Claude Code
+export DISABLE_INSTALLATION_CHECKS=1

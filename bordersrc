@@ -4,7 +4,7 @@
 
 options=(
     style=round
-    width=3.0
+    width=5.0
     hidpi=on
     active_color=0xffff1493      # Catppuccin Latte Blue
     inactive_color=0x25ff1493    # Catppuccin Latte Surface1
