@@ -78,11 +78,13 @@ alt-a = 'workspace A_1'
 alt-s = 'workspace S_1'
 alt-d = 'workspace D_1'
 alt-f = 'workspace F_1'
+alt-g = 'workspace G_1'
 
 alt-ctrl-a = 'workspace A_2'
 alt-ctrl-s = 'workspace S_2'
 alt-ctrl-d = 'workspace D_2'
 alt-ctrl-f = 'workspace F_2'
+alt-ctrl-g = 'workspace G_2'
 
 # Letter-based workspaces (A-Z)
 alt-t = 'workspace Terminal_1'  # Terminal
@@ -132,6 +134,7 @@ A_1 = ['main']
 S_1 = ['main']
 D_1 = ['main']
 F_1 = ['main']
+G_1 = ['main']
 
 A_2 = ['secondary']
 S_2 = ['secondary']
@@ -330,3 +333,19 @@ run = ['layout floating']
 if.app-id = 'org.pqrs.Karabiner-EventViewer'
 check-further-callbacks = true
 run = ['layout floating']
+
+[[on-window-detected]]
+if.app-id = 'cx.c3.theunarchiver'
+check-further-callbacks = true
+run = ['layout floating']
+
+[[on-window-detected]]
+if.app-id = 'com.apple.RemoteDesktop'
+check-further-callbacks = true
+run = ['layout floating', 'move-node-to-workspace G_1']
+
+[[on-window-detected]]
+if.app-id = 'com.apple.RemoteDesktop'
+check-further-callbacks = true
+if.window-title-regex-substring = 'Remote Desktop'
+run = ['layout tiling']
