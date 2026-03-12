@@ -1,6 +1,5 @@
 tap "felixkratz/formulae"
 tap "hashicorp/tap"
-tap "homebrew/cask-fonts"
 tap "libsql/sqld"
 tap "minio/stable"
 tap "nikitabobko/tap"

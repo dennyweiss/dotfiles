@@ -21,7 +21,7 @@ bindkey -e
 
 # End of lines configured by zsh-newuser-install
 # The following lines were added by compinstall
-fpath+=(~/.config/hcloud/completion/zsh)
+fpath+=(${HOME}/.config/hcloud/completion/zsh)
 zstyle :compinstall filename "${HOME}/.zshrc"
 autoload -Uz compinit
 compinit
@@ -55,7 +55,13 @@ export PATH
 export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm
 
-eval "$(/opt/homebrew/bin/brew shellenv)"
+if [[ -f /opt/homebrew/bin/brew ]]; then
+    eval "$(/opt/homebrew/bin/brew shellenv)"
+fi
+
+if [[ -f /usr/local/bin/brew ]]; then
+    eval "$(/usr/local/bin/brew shellenv)"
+fi
 
 if which brew &>/dev/null; then
   _BREW_PYTHON_PATH="$(brew --prefix)/bin/python3"
@@ -65,10 +71,6 @@ if which brew &>/dev/null; then
 
   # Setup antigen
   source $(brew --prefix)/share/antigen/antigen.zsh
-fi
-
-if [ -f /opt/homebrew/share/antigen/antigen.zsh ]; then
-  source /opt/homebrew/share/antigen/antigen.zsh
 fi
 
 # Load the oh-my-zsh's library.
@@ -187,37 +189,34 @@ if docker context inspect &>/dev/null; then
 fi
 
 # Herd injected PHP 8.4 configuration.
-export HERD_PHP_84_INI_SCAN_DIR="/Users/dw/Library/Application Support/Herd/config/php/84/"
+export HERD_PHP_84_INI_SCAN_DIR="${HOME}/Library/Application Support/Herd/config/php/84/"
 
 # Herd injected PHP binary.
-export PATH="/Users/dw/Library/Application Support/Herd/bin/":$PATH
+export PATH="${HOME}/Library/Application Support/Herd/bin/":$PATH
 
 # pnpm
-export PNPM_HOME="/Users/dw/Library/pnpm"
+export PNPM_HOME="${HOME}/Library/pnpm"
 case ":$PATH:" in
   *":$PNPM_HOME:"*) ;;
   *) export PATH="$PNPM_HOME:$PATH" ;;
 esac
 # pnpm end
 
-# Herd injected PHP 8.3 configuration.
-export HERD_PHP_83_INI_SCAN_DIR="/Users/dw/Library/Application Support/Herd/config/php/83/"
-
 # Herd injected PHP 8.5 configuration.
-export HERD_PHP_85_INI_SCAN_DIR="/Users/dw/Library/Application Support/Herd/config/php/85/"
+export HERD_PHP_85_INI_SCAN_DIR="${HOME}/Library/Application Support/Herd/config/php/85/"
 
 # bun completions
-[ -s "/Users/dw/.bun/_bun" ] && source "/Users/dw/.bun/_bun"
+[ -s "${HOME}/.bun/_bun" ] && source "${HOME}/.bun/_bun"
 
-export CC_PROMPT_DB_CONNECTION=~/.claude/cc-prompt.sqlite
-[[ -f ~/Code/claude-code-tooling/cc-prompt ]] && export PATH=~/Code/claude-code-tooling:$PATH
+export CC_PROMPT_DB_CONNECTION=${HOME}/.claude/cc-prompt.sqlite
+[[ -f ${HOME}/Code/claude-code-tooling/cc-prompt ]] && export PATH=${HOME}/Code/claude-code-tooling:$PATH
 
 export CC_TELEGRAM_WEBHOOK_URL="https://do-01.whaaat.ai/webhook/cb182be6-e732-492d-b8a6-2a09a5046000"
 export CC_TELEGRAM_API_KEY="3ded09bb-4d2b-43dc-893b-b5d231ebc0c3"
 export CC_TELEGRAM_CHAT_ID="5096201627"
 
 # bun
-export BUN_INSTALL="$HOME/.bun"
+export BUN_INSTALL="${HOME}/.bun"
 export PATH="$BUN_INSTALL/bin:$PATH"
 
 # Claude Code
