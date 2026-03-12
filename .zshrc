@@ -24,7 +24,11 @@ bindkey -e
 fpath+=(${HOME}/.config/hcloud/completion/zsh)
 zstyle :compinstall filename "${HOME}/.zshrc"
 autoload -Uz compinit
-compinit
+if dscl . -read /Groups/admin GroupMembership 2>/dev/null | grep -qw "$(whoami)"; then
+  compinit
+else
+  compinit -u
+fi
 
 # End of lines added by compinstall
 
