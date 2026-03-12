@@ -1,5 +1,7 @@
 [include]
     path = ~/.dotfiles/gitconfigs/.gitconfig.default
+    path = ~/.dotfiles/gitconfigs/.gitconfig.conditional.m_at_mi16pro
+    path = ~/.dotfiles/gitconfigs/.gitconfig.conditional.a1_at_mi16pro
 
 [core]
   editor = zed --wait

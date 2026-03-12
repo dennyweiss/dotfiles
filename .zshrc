@@ -221,3 +221,7 @@ export PATH="$BUN_INSTALL/bin:$PATH"
 
 # Claude Code
 export DISABLE_INSTALLATION_CHECKS=1
+
+
+# Herd injected PHP 8.3 configuration.
+export HERD_PHP_83_INI_SCAN_DIR="/Users/dw/Library/Application Support/Herd/config/php/83/"

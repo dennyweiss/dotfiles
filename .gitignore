@@ -8,3 +8,4 @@ gitconfigs/*
 !gitconfigs/.gitkeep
 src/150_remote-alias.zsh
 /.tmp
+/gitconfigs/.gitconfig.conditional.*
