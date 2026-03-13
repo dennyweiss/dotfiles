@@ -192,11 +192,14 @@ if docker context inspect &>/dev/null; then
   export DOCKER_HOST=$(docker context inspect --format='{{.Endpoints.docker.Host}}')
 fi
 
-# Herd injected PHP 8.4 configuration.
-export HERD_PHP_84_INI_SCAN_DIR="${HOME}/Library/Application Support/Herd/config/php/84/"
-
 # Herd injected PHP binary.
 export PATH="${HOME}/Library/Application Support/Herd/bin/":$PATH
+# Herd injected PHP 8.5 configuration.
+export HERD_PHP_85_INI_SCAN_DIR="${HOME}/Library/Application Support/Herd/config/php/85/"
+# Herd injected PHP 8.4 configuration.
+export HERD_PHP_84_INI_SCAN_DIR="${HOME}/Library/Application Support/Herd/config/php/84/"
+# Herd injected PHP 8.3 configuration.
+export HERD_PHP_83_INI_SCAN_DIR="${HOME}/Library/Application Support/Herd/config/php/83/"
 
 # pnpm
 export PNPM_HOME="${HOME}/Library/pnpm"
@@ -205,9 +208,6 @@ case ":$PATH:" in
   *) export PATH="$PNPM_HOME:$PATH" ;;
 esac
 # pnpm end
-
-# Herd injected PHP 8.5 configuration.
-export HERD_PHP_85_INI_SCAN_DIR="${HOME}/Library/Application Support/Herd/config/php/85/"
 
 # bun completions
 [ -s "${HOME}/.bun/_bun" ] && source "${HOME}/.bun/_bun"
@@ -225,7 +225,3 @@ export PATH="$BUN_INSTALL/bin:$PATH"
 
 # Claude Code
 export DISABLE_INSTALLATION_CHECKS=1
-
-
-# Herd injected PHP 8.3 configuration.
-export HERD_PHP_83_INI_SCAN_DIR="/Users/dw/Library/Application Support/Herd/config/php/83/"
