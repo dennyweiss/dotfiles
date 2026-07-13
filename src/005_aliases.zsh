@@ -414,3 +414,63 @@ bos() {
 bos::chrome() {
     (cd ~/Code/UnitScale/business-os && CAN=b1 claude --model opus --chrome)
 }
+
+cc() {
+  local default_model='opus'
+  local default_effort='high'
+
+  if ! which claude &>/dev/null; then
+    echo
+    echo "❌  ERROR: 'claude' cli required but missing"
+    echo
+    return 1
+  fi
+
+  local model=''
+  local effort=''
+  local can_env=''
+  local -a passthrough=()
+
+  # Extract a leading [model] and [effort] positional and pull out any CAN=*
+  # assignment, forwarding everything else verbatim to claude.
+  for arg in "$@"; do
+    case "${arg}" in
+      CAN=*)
+        can_env="${arg}"
+        ;;
+      opus|sonnet|fable|haiku)
+        if [[ -z "${model}" && ${#passthrough[@]} -eq 0 ]]; then
+          model="${arg}"
+        else
+          passthrough+=("${arg}")
+        fi
+        ;;
+      low|medium|high|xhigh|max)
+        if [[ -n "${model}" && -z "${effort}" && ${#passthrough[@]} -eq 0 ]]; then
+          effort="${arg}"
+        else
+          passthrough+=("${arg}")
+        fi
+        ;;
+      *)
+        passthrough+=("${arg}")
+        ;;
+    esac
+  done
+
+  model="${model:-${default_model}}"
+  effort="${effort:-${default_effort}}"
+
+  # opus and haiku are addressed with the 1M context variant, other models are not.
+  if [[ "${model}" == 'opus' || "${model}" == 'haiku' ]]; then
+    model="${model}[1m]"
+  fi
+
+  _function-description-helper "${can_env} claude --model ${model} --effort ${effort}" "${passthrough[*]}"
+
+  if [[ -n "${can_env}" ]]; then
+    env "${can_env}" claude --model "${model}" --effort "${effort}" "${passthrough[@]}"
+  else
+    claude --model "${model}" --effort "${effort}" "${passthrough[@]}"
+  fi
+}
