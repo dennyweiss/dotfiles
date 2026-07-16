@@ -50,6 +50,8 @@
   cob = checkout -b
   cobr = "!f() { git cob ${1} origin/${1}; }; f"
   cobl = "!f() { git cob ${1} && git push --set-upstream origin ${1} --no-verify; }; f"
+  swr = "!f() { git fetch origin \"${1}\" && { git switch -c \"${1}\" --track \"origin/${1}\" 2>/dev/null || { git switch \"${1}\" && git branch --set-upstream-to=\"origin/${1}\" \"${1}\"; }; }; }; f"
+  switch-remote = swr
   cm = "!f() { git add -A && git commit -m \"${1}\"; }; f"
   cma = commit --amend
   save = !git add -A && git commit -m 'SAVEPOINT'
@@ -88,3 +90,18 @@
 
 [safe]
 	directory = /Users/agents/Code
+	directory = /Users/dw/Code/ufostart/product/.sandcastle/worktrees/sandcastle-worker-20260619-123849-97889d
+	directory = /Users/dw/Code/ufostart/product
+	directory = /Users/dw/Code/ufostart/product/.sandcastle/worktrees/sandcastle-worker-20260619-133859-3aa780
+	directory = /Users/dw/Code/ufostart/product
+	directory = /Users/dw/Code/ufostart/product/.sandcastle/worktrees/sandcastle-worker-20260619-133955-5fe2bb
+	directory = /Users/dw/Code/ufostart/product
+	directory = /Users/dw/Code/ufostart/product/.sandcastle/worktrees/sandcastle-worker-20260619-181736-58142b
+	directory = /Users/dw/Code/ufostart/product
+	directory = /Users/dw/Code/ufostart/product/.sandcastle/worktrees/sandcastle-worker-20260619-182213-4991b9
+	directory = /Users/dw/Code/ufostart/product
+	directory = /Users/dw/Code/ufostart/product/.sandcastle/worktrees/sandcastle-worker-20260619-183145-b69f31
+	directory = /Users/dw/Code/ufostart/product
+[user]
+	name = Denny Weiß
+	email = 4938268+dennyweiss@users.noreply.github.com

@@ -10,3 +10,5 @@ src/150_remote-alias.zsh
 /.tmp
 /gitconfigs/.gitconfig.conditional.*
 /src/999_custom-override.zsh
+
+**/.claude/settings.local.json
