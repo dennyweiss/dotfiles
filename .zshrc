@@ -16,6 +16,13 @@ SAVEHIST=$HISTSIZE
 
 # setopt hist_ignore_all_dups # ignore duplicate history entries
 setopt appendhistory autocd beep nomatch
+setopt hist_ignore_all_dups
+setopt hist_save_no_dups
+setopt hist_expire_dups_first
+setopt hist_find_no_dups
+setopt hist_reduce_blanks
+setopt share_history
+
 unsetopt extendedglob notify
 bindkey -e
 
