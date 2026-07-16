@@ -253,9 +253,9 @@ run = ['layout floating']
 if.app-id = 'com.apple.ActivityMonitor'
 run = ['layout floating']
 
-[[on-window-detected]]
-if.app-id = 'com.moneymoney-app.retail'
-run = ['layout floating']
+#[[on-window-detected]]
+#if.app-id = 'com.moneymoney-app.retail'
+#run = ['layout floating']
 
 # // WORKSPACE 1 ///////////////////////////////////////////////////
 # @todo add ChatGPT
@@ -349,3 +349,13 @@ if.app-id = 'com.apple.RemoteDesktop'
 check-further-callbacks = true
 if.window-title-regex-substring = 'Remote Desktop'
 run = ['layout tiling']
+
+[[on-window-detected]]
+if.app-id = 'com.apple.Preview'
+check-further-callbacks = true
+run = ['layout floating']
+
+[[on-window-detected]]
+if.app-id = 'com.linear'
+check-further-callbacks = true
+run = ['layout floating']
