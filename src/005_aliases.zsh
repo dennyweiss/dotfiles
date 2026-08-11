@@ -474,3 +474,62 @@ cc() {
     claude --model "${model}" --effort "${effort}" "${passthrough[@]}"
   fi
 }
+
+cx() {
+  local default_model='sol'
+  local default_effort='high'
+
+  if ! which codex &>/dev/null; then
+    echo
+    echo "❌  ERROR: 'codex' cli required but missing"
+    echo
+    return 1
+  fi
+
+  local model=''
+  local effort=''
+  local can_env=''
+  local -a passthrough=()
+
+  # Extract a leading [model] and [effort] positional and pull out any CAN=*
+  # assignment, forwarding everything else verbatim to codex.
+  for arg in "$@"; do
+    case "${arg}" in
+      CAN=*)
+        can_env="${arg}"
+        ;;
+      sol|terra|luna)
+        if [[ -z "${model}" && ${#passthrough[@]} -eq 0 ]]; then
+          model="${arg}"
+        else
+          passthrough+=("${arg}")
+        fi
+        ;;
+      low|medium|high|xhigh|max|ultra)
+        if [[ -n "${model}" && -z "${effort}" && ${#passthrough[@]} -eq 0 ]]; then
+          effort="${arg}"
+        else
+          passthrough+=("${arg}")
+        fi
+        ;;
+      *)
+        passthrough+=("${arg}")
+        ;;
+    esac
+  done
+
+  model="${model:-${default_model}}"
+  effort="${effort:-${default_effort}}"
+
+  # The aliases are the short halves of the codex preset slugs.
+  model="gpt-5.6-${model}"
+
+  # Root options bind before a subcommand, so these stay valid ahead of `exec`/`review`.
+  _function-description-helper "${can_env} codex --model ${model} -c model_reasoning_effort=${effort}" "${passthrough[*]}"
+
+  if [[ -n "${can_env}" ]]; then
+    env "${can_env}" codex --model "${model}" -c "model_reasoning_effort=${effort}" "${passthrough[@]}"
+  else
+    codex --model "${model}" -c "model_reasoning_effort=${effort}" "${passthrough[@]}"
+  fi
+}
