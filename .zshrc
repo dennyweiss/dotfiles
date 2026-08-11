@@ -228,3 +228,15 @@ export PATH="$BUN_INSTALL/bin:$PATH"
 
 # Claude Code
 export DISABLE_INSTALLATION_CHECKS=1
+# export CLAUDE_CODE_DISABLE_MOUSE_CLICKS=1
+
+# Herd injected PHP 8.2 configuration.
+export HERD_PHP_82_INI_SCAN_DIR="/Users/dw/Library/Application Support/Herd/config/php/82/"
+
+
+# Herd injected PHP 8.5 configuration.
+export HERD_PHP_85_INI_SCAN_DIR="/Users/dw/Library/Application Support/Herd/config/php/85/"
+
+
+# Herd injected PHP 8.3 configuration.
+export HERD_PHP_83_INI_SCAN_DIR="/Users/dw/Library/Application Support/Herd/config/php/83/"
